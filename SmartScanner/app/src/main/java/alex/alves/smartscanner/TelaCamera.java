@@ -10,6 +10,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.SparseArray;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -149,5 +151,14 @@ public class TelaCamera extends AppCompatActivity {
 
 
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
 
+        // Pega o inflater já existente
+        MenuInflater criarMenu = getMenuInflater();
+        // Cria menu a partir da leitura de um xml
+        criarMenu.inflate(R.menu.meu_menu,menu);
+
+        return true;
+    }
 }
