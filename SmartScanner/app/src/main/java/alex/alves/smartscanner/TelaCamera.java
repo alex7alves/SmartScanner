@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -53,6 +54,7 @@ public class TelaCamera extends AppCompatActivity {
                 }
         }
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,4 +163,20 @@ public class TelaCamera extends AppCompatActivity {
 
         return true;
     }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Implementar ação ao clicar no item do menu
+
+        switch(item.getItemId()){
+            case R.id.id_capturar:
+                Toast.makeText(getBaseContext()," VocÊ clicou no botão capturar ",Toast.LENGTH_LONG).show();
+                break;
+        }
+
+
+        return super.onOptionsItemSelected(item);
+    }
+
 }
