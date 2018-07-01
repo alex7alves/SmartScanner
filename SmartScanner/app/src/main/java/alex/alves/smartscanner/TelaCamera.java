@@ -41,7 +41,7 @@ public class TelaCamera extends AppCompatActivity {
     CameraSource capturar;
     final int cameraPermission = 1001;
 
-    TextToSpeech lerTexto;
+    Ler lerTexto;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -79,9 +79,15 @@ public class TelaCamera extends AppCompatActivity {
         });
 
 
-
         camera = (SurfaceView) findViewById(R.id.surfaceView);
+        getTexto();
 
+        lerTexto = new Ler();
+        lerTexto.initLerTexto(this);
+    }
+
+
+    public void getTexto(){
         // Da API vision do google
         final TextRecognizer pegarTexto = new TextRecognizer.Builder(getApplicationContext()).build();
 
@@ -116,23 +122,21 @@ public class TelaCamera extends AppCompatActivity {
                             public void receiveDetections(Detector.Detections<TextBlock> detections) {
                                 final SparseArray<TextBlock> palavras = detections.getDetectedItems();
                                 if(palavras.size() !=0){
-                                  //  texto.post(new Runnable() {
-                                     //   @Override
+                                    //  texto.post(new Runnable() {
+                                    //   @Override
                                     //    public void run() {
-                                            StringBuilder s = new StringBuilder();
+                                    StringBuilder s = new StringBuilder();
 
-                                            for(int i=0;i<palavras.size();i++){
+                                    for(int i=0;i<palavras.size();i++){
 
-                                                TextBlock p = palavras.valueAt(i);
-                                                s.append(p.getValue());
-                                                s.append("\n");
-                                            }
-                                            texto=s.toString();
-                                            Toast.makeText(getBaseContext(),texto,Toast.LENGTH_LONG).show();
-                                            //texto.setText(s.toString());
-                                        }
-                                  //  });
-                                //}
+                                        TextBlock p = palavras.valueAt(i);
+                                        s.append(p.getValue());
+                                        s.append("\n");
+                                    }
+                                    texto=s.toString();
+                                    Toast.makeText(getBaseContext(),texto,Toast.LENGTH_LONG).show();
+
+                                }
                             }
                         });
 
@@ -153,23 +157,10 @@ public class TelaCamera extends AppCompatActivity {
             });
 
         }
-
-        // Preparando para receber os textos
-        TextToSpeech.OnInitListener ouvir =
-                new TextToSpeech.OnInitListener() {
-                    @Override
-                    public void onInit(final int status) {
-                        if (status == TextToSpeech.SUCCESS) {
-                            Log.d("OnInitListener", "Processo de leitura carregado corretamente.");
-                            lerTexto.setLanguage(Locale.getDefault());
-                        } else {
-                            Log.d("OnInitListener", "Erro ao carregar a voz");
-                        }
-                    }
-                };
-        lerTexto = new TextToSpeech(this.getApplicationContext(), ouvir);
-
     }
+
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
 
@@ -182,7 +173,6 @@ public class TelaCamera extends AppCompatActivity {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Implementar ação ao clicar no item do menu
@@ -205,7 +195,8 @@ public class TelaCamera extends AppCompatActivity {
                 Toast.makeText(getBaseContext(),texto,Toast.LENGTH_LONG).show();
 
                 //lerTexto.speak(" VocÊ clicou no botão capturar ", TextToSpeech.QUEUE_ADD, null, "DEFAULT");
-                lerTexto.speak(texto, TextToSpeech.QUEUE_ADD, null, "DEFAULT");
+               // lerTexto.speak(texto, TextToSpeech.QUEUE_ADD, null, "DEFAULT");
+                lerTexto.getLer(texto);
                 break;
         }
 
