@@ -85,6 +85,9 @@ public class MainActivity extends AppCompatActivity
             // Handle the camera action
             ChamarTela();
         } else if (id == R.id.nav_gallery) {
+            Intent telaCam = new Intent(MainActivity.this,TelaImagem.class);
+            // telaCam.putExtra("tela","Bom dia");
+            startActivity(telaCam );
 
         } else if (id == R.id.nav_slideshow) {
 
@@ -101,15 +104,12 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public void TelaCamera(View view)
-    {
-        ChamarTela();
-    }
+
 
     public void ChamarTela()
     {
         Intent telaCam = new Intent(MainActivity.this,TelaCamera.class);
-        telaCam.putExtra("tela","Bom dia");
+        //telaCam.putExtra("tela","Bom dia");
         startActivity(telaCam );
     }
 }
