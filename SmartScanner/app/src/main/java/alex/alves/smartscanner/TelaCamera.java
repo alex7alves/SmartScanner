@@ -194,14 +194,11 @@ public class TelaCamera extends AppCompatActivity {
 
                 lerTexto.speak(" VocÊ clicou no botão capturar ", TextToSpeech.QUEUE_ADD, null, "DEFAULT");
                 break;
-<<<<<<< HEAD
             case R.id.id_ler:
                 Intent telaCam = new Intent(TelaCamera.this,TelaImagem.class);
                // telaCam.putExtra("tela","Bom dia");
                 startActivity(telaCam );
                 break;
-=======
->>>>>>> 353fcbd5b2fa548a1bd70f5977c7d676619497f4
         }
 
 
