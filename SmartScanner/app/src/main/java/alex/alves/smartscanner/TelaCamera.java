@@ -35,8 +35,8 @@ import java.util.Locale;
 
 public class TelaCamera extends AppCompatActivity {
 
-    TextView texto;
 
+    String texto=null;
     SurfaceView camera;
     CameraSource capturar;
     final int cameraPermission = 1001;
@@ -78,9 +78,7 @@ public class TelaCamera extends AppCompatActivity {
             }
         });
 
-        texto = (TextView)findViewById(R.id.textView2);
-        String s = getIntent().getStringExtra("tela");
-        texto.setText(s);
+
 
         camera = (SurfaceView) findViewById(R.id.surfaceView);
 
@@ -92,8 +90,8 @@ public class TelaCamera extends AppCompatActivity {
         } else {
             capturar = new CameraSource.Builder(getApplicationContext(), pegarTexto)
                     .setFacing(CameraSource.CAMERA_FACING_BACK)
-                    .setRequestedPreviewSize(1920, 1080)
-                    .setRequestedFps(2.0f)
+                    .setRequestedPreviewSize(1280, 1024)
+                    .setRequestedFps(1.0f)
                     .setAutoFocusEnabled(true)
                     .build();
 
@@ -118,9 +116,9 @@ public class TelaCamera extends AppCompatActivity {
                             public void receiveDetections(Detector.Detections<TextBlock> detections) {
                                 final SparseArray<TextBlock> palavras = detections.getDetectedItems();
                                 if(palavras.size() !=0){
-                                    texto.post(new Runnable() {
-                                        @Override
-                                        public void run() {
+                                  //  texto.post(new Runnable() {
+                                     //   @Override
+                                    //    public void run() {
                                             StringBuilder s = new StringBuilder();
 
                                             for(int i=0;i<palavras.size();i++){
@@ -129,11 +127,12 @@ public class TelaCamera extends AppCompatActivity {
                                                 s.append(p.getValue());
                                                 s.append("\n");
                                             }
-
-                                            texto.setText(s.toString());
+                                            texto=s.toString();
+                                            Toast.makeText(getBaseContext(),texto,Toast.LENGTH_LONG).show();
+                                            //texto.setText(s.toString());
                                         }
-                                    });
-                                }
+                                  //  });
+                                //}
                             }
                         });
 
@@ -190,14 +189,23 @@ public class TelaCamera extends AppCompatActivity {
 
         switch(item.getItemId()){
             case R.id.id_capturar:
-                Toast.makeText(getBaseContext()," VocÊ clicou no botão capturar ",Toast.LENGTH_LONG).show();
-
-                lerTexto.speak(" VocÊ clicou no botão capturar ", TextToSpeech.QUEUE_ADD, null, "DEFAULT");
-                break;
+                //s= "Sem texto capturado";
+                if( texto==null){
+                    texto= "Texto não capturado";
+                }else {
+                    Intent telaCam = new Intent(TelaCamera.this, telaCapturar.class);
+                    telaCam.putExtra("telaCapturar", texto);
+                    startActivity(telaCam);
+                    break;
+                }
             case R.id.id_ler:
-                Intent telaCam = new Intent(TelaCamera.this,TelaImagem.class);
-               // telaCam.putExtra("tela","Bom dia");
-                startActivity(telaCam );
+
+                //lerTexto.speak(" VocÊ clicou no botão capturar ", TextToSpeech.QUEUE_ADD, null, "DEFAULT");
+
+                Toast.makeText(getBaseContext(),texto,Toast.LENGTH_LONG).show();
+
+                //lerTexto.speak(" VocÊ clicou no botão capturar ", TextToSpeech.QUEUE_ADD, null, "DEFAULT");
+                lerTexto.speak(texto, TextToSpeech.QUEUE_ADD, null, "DEFAULT");
                 break;
         }
 

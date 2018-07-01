@@ -4,9 +4,10 @@
     android:layout_width="match_parent"
     android:text=" SmartScanner "
     android:layout_height="match_parent">
+
     <item
-        android:id="@+id/id_capturar"
-        android:title="Capturar"
+        android:id="@+id/id_compartilhar"
+        android:title="Compartilhar"
         app:showAsAction="always" />
 
     <item

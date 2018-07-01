@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.TextToSpeech.OnInitListener;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -36,7 +37,7 @@ public class TelaImagem extends AppCompatActivity {
 
 
     ImageView mostrarFotos;
-
+    String s=null;
     TextToSpeech lerTexto;
 
     int codigoFoto=1;
@@ -88,54 +89,7 @@ public class TelaImagem extends AppCompatActivity {
 
     }
 
-   /* @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == TelaImagem.RESULT_OK) {
 
-              if (requestCode == codigoFoto) {
-
-                  Uri imagemCaptada = data.getData();
-                  String[] filePathColumn = { MediaStore.Images.Media.DATA };
-
-                  Cursor cursor = getContentResolver().query(imagemCaptada,
-                          filePathColumn, null, null, null);
-                  cursor.moveToFirst();
-
-                  int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                  String picturePath = cursor.getString(columnIndex);
-                  cursor.close();
-
-                 // mostrarFotos.setImageBitmap(getBitmap(imagemCaptada));
-               //  Bitmap bm = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.teste);
-                 // mostrarFotos.setImageBitmap(bm);
-                  mostrarFotos.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-                  //
-                  //Log.d("OnInitListener",String.valueOf(imagemCaptada));
-                  mostrarFotos.setScaleType(ImageView.ScaleType.FIT_XY);
-                //  Toast.makeText(getBaseContext(),String.valueOf(picturePath),Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-    */
-    /*
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == codigoFoto && resultCode == RESULT_OK && null != data) {
-            Uri selectedImage = data.getData();
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
-            Cursor cursor = getContentResolver().query(selectedImage,filePathColumn, null, null, null);
-            cursor.moveToFirst();
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
-            cursor.close();
-           // ImageView imageView = (ImageView) findViewById(R.id.iv);
-            mostrarFotos.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-        }
-    }
-
-*/
    @Override
    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
        super.onActivityResult(requestCode, resultCode, data);
@@ -191,18 +145,24 @@ public class TelaImagem extends AppCompatActivity {
 
         switch(item.getItemId()){
             case R.id.id_capturar:
+                //s= "Sem texto capturado";
+                if( s==null){
+                    s= "Texto não capturado";
+                }else {
+                    Intent telaCam = new Intent(TelaImagem.this, telaCapturar.class);
+                    telaCam.putExtra("telaCapturar", s);
+                    startActivity(telaCam);
+                    break;
+                }
+            case R.id.id_ler:
+
                 //lerTexto.speak(" VocÊ clicou no botão capturar ", TextToSpeech.QUEUE_ADD, null, "DEFAULT");
-                String s =getTextoImagem();
+                s =getTextoImagem();
                 Toast.makeText(getBaseContext(),s,Toast.LENGTH_LONG).show();
 
                 //lerTexto.speak(" VocÊ clicou no botão capturar ", TextToSpeech.QUEUE_ADD, null, "DEFAULT");
-                lerTexto.speak(s, TextToSpeech.QUEUE_ADD, null, "DEFAULT");
+                lerTexto.speak(s, TextToSpeech.QUEUE_FLUSH, null, "DEFAULT");
                 break;
-            case R.id.id_ler:
-               /* Intent telaCam = new Intent(TelaCamera.this,TelaImagem.class);
-                // telaCam.putExtra("tela","Bom dia");
-                startActivity(telaCam );
-                break;*/
         }
 
 
@@ -210,50 +170,11 @@ public class TelaImagem extends AppCompatActivity {
     }
 
 
-   /* public String getTextoImagem(){
-         final String[] texto = new String[1];
-         TextRecognizer pegarTexto = new TextRecognizer.Builder(getApplicationContext()).build();
-         pegarTexto.setProcessor(new Detector.Processor<TextBlock>() {
-
-             @Override
-             public void release() {
-
-             }
-
-             @Override
-             public void receiveDetections(Detector.Detections<TextBlock> detections) {
-                 final SparseArray<TextBlock> palavras = detections.getDetectedItems();
-
-                 if(palavras.size() !=0){
-                     mostrarFotos.post(new Runnable() {
-                         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-                         @Override
-                         public void run() {
-
-                             StringBuilder s = new StringBuilder();
-                             for(int i=0;i<palavras.size();i++){
-
-                                 TextBlock p = palavras.valueAt(i);
-                                 s.append(p.getValue());
-                                 s.append("\n");
-                             }
-
-                             texto[0] =s.toString();
-                             lerTexto.speak(s.toString(), TextToSpeech.QUEUE_ADD, null, "DEFAULT");
-                        }
-                    });
-                 }
-             }
-         });
-            return texto[0];
-    }*/
 
     public String getTextoImagem() {
         StringBuilder s = new StringBuilder();
         BitmapDrawable drawable = (BitmapDrawable)mostrarFotos.getDrawable();
         Bitmap bm = drawable.getBitmap();
-       // Bitmap bm= mostrarFotos.getDrawingCache();
-       // Bitmap bm = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.olhos);
 
         // Da API vision do google
         TextRecognizer pegarTexto = new TextRecognizer.Builder(getApplicationContext()).build();
@@ -264,18 +185,15 @@ public class TelaImagem extends AppCompatActivity {
             Frame frame = new Frame.Builder().setBitmap(bm).build();
             SparseArray<TextBlock> palavras = pegarTexto.detect(frame);
 
-
-
             for(int i=0;i<palavras.size();i++){
 
                 TextBlock p = palavras.valueAt(i);
                 s.append(p.getValue());
                 s.append("\n");
+
             }
-          //  campo.setText(s.toString());
         }
         return s.toString();
     }
-
 
 }
