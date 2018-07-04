@@ -17,7 +17,7 @@ import java.util.Locale;
 
 public class telaCapturar extends AppCompatActivity {
 
-    TextToSpeech lerTexto;
+    Ler lerTexto;
     EditText campo;
     Intent tela;
     @Override
@@ -31,19 +31,8 @@ public class telaCapturar extends AppCompatActivity {
         campo.setText(tela.getStringExtra("telaCapturar"));
 
         // Preparando para receber os textos
-        TextToSpeech.OnInitListener ouvir =
-                new TextToSpeech.OnInitListener() {
-                    @Override
-                    public void onInit(final int status) {
-                        if (status == TextToSpeech.SUCCESS) {
-                            Log.d("OnInitListener", "Processo de leitura carregado corretamente.");
-                            lerTexto.setLanguage(Locale.getDefault());
-                        } else {
-                            Log.d("OnInitListener", "Erro ao carregar a voz");
-                        }
-                    }
-                };
-        lerTexto = new TextToSpeech(this.getApplicationContext(), ouvir);
+        lerTexto = new Ler();
+        lerTexto.initLerTexto(this);
 
     }
 
@@ -60,7 +49,6 @@ public class telaCapturar extends AppCompatActivity {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Implementar ação ao clicar no item do menu
@@ -70,17 +58,11 @@ public class telaCapturar extends AppCompatActivity {
 
                 break;
             case R.id.id_ler:
-                //lerTexto.speak(" VocÊ clicou no botão capturar ", TextToSpeech.QUEUE_ADD, null, "DEFAULT");
                 String s =getTexto();
-                // Toast.makeText(getBaseContext(),s,Toast.LENGTH_LONG).show();
-
-                //lerTexto.speak(" VocÊ clicou no botão capturar ", TextToSpeech.QUEUE_ADD, null, "DEFAULT");
-                lerTexto.speak(s, TextToSpeech.QUEUE_ADD, null, "DEFAULT");
+                lerTexto.getLer(s);
                 break;
 
         }
-
-
         return super.onOptionsItemSelected(item);
     }
 

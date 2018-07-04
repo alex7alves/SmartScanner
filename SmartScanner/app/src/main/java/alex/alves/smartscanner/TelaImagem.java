@@ -38,7 +38,7 @@ public class TelaImagem extends AppCompatActivity {
 
     ImageView mostrarFotos;
     String s=null;
-    TextToSpeech lerTexto;
+    Ler lerTexto;
 
     int codigoFoto=1;
     @Override
@@ -49,31 +49,12 @@ public class TelaImagem extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-    /*    fab.setOnClickListener(new View.OnClickListener() {
-         //   @Override
-           /* public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
+
         mostrarFotos = (ImageView) findViewById(R.id.imageView2);
 
-
         // Preparando para receber os textos
-        TextToSpeech.OnInitListener ouvir =
-                new TextToSpeech.OnInitListener() {
-                    @Override
-                    public void onInit(final int status) {
-                        if (status == TextToSpeech.SUCCESS) {
-                            Log.d("OnInitListener", "Processo de leitura carregado corretamente.");
-                            lerTexto.setLanguage(Locale.getDefault());
-                        } else {
-                            Log.d("OnInitListener", "Erro ao carregar a voz");
-                        }
-                    }
-                };
-        lerTexto = new TextToSpeech(this.getApplicationContext(), ouvir);
-
+        lerTexto = new Ler();
+        lerTexto.initLerTexto(this);
 
     }
     public void fabAction( View v)
@@ -106,11 +87,7 @@ public class TelaImagem extends AppCompatActivity {
                } catch (IOException e) {
                    e.printStackTrace();
                }
-               //  mostrarFotos.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-               //
-               //Log.d("OnInitListener",String.valueOf(imagemCaptada));
-              // mostrarFotos.setScaleType(ImageView.ScaleType.FIT_XY);
-               //  Toast.makeText(getBaseContext(),String.valueOf(picturePath),Toast.LENGTH_LONG).show();
+
            }
        }
    }
@@ -119,10 +96,8 @@ public class TelaImagem extends AppCompatActivity {
 
     public Bitmap getBitmap(Uri imagem)
     {
-      // Bitmap bm = BitmapFactory.decodeResource(getApplicationContext().getResources(),R.drawable.olhos);
 
         return BitmapFactory.decodeFile(String.valueOf(imagem));
-
 
     }
 
@@ -138,14 +113,13 @@ public class TelaImagem extends AppCompatActivity {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Implementar ação ao clicar no item do menu
 
         switch(item.getItemId()){
             case R.id.id_capturar:
-                //s= "Sem texto capturado";
                 if( s==null){
                     s= "Texto não capturado";
                 }else {
@@ -156,12 +130,10 @@ public class TelaImagem extends AppCompatActivity {
                 }
             case R.id.id_ler:
 
-                //lerTexto.speak(" VocÊ clicou no botão capturar ", TextToSpeech.QUEUE_ADD, null, "DEFAULT");
                 s =getTextoImagem();
                 Toast.makeText(getBaseContext(),s,Toast.LENGTH_LONG).show();
 
-                //lerTexto.speak(" VocÊ clicou no botão capturar ", TextToSpeech.QUEUE_ADD, null, "DEFAULT");
-                lerTexto.speak(s, TextToSpeech.QUEUE_FLUSH, null, "DEFAULT");
+                lerTexto.getLer(s);
                 break;
         }
 
