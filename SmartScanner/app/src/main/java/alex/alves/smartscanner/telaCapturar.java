@@ -19,6 +19,7 @@ public class telaCapturar extends AppCompatActivity {
 
     Ler lerTexto;
     EditText campo;
+    String texto;
     Intent tela;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +30,7 @@ public class telaCapturar extends AppCompatActivity {
 
         tela = getIntent();
         campo.setText(tela.getStringExtra("telaCapturar"));
-
+        texto = String.valueOf(campo.getText());
         // Preparando para receber os textos
         lerTexto = new Ler();
         lerTexto.initLerTexto(this);
@@ -56,6 +57,10 @@ public class telaCapturar extends AppCompatActivity {
         switch(item.getItemId()){
             case R.id.id_compartilhar:
 
+                Intent IntentCompartilhar = new Intent(Intent.ACTION_SEND);
+                IntentCompartilhar.putExtra(Intent.EXTRA_TEXT, texto);
+                IntentCompartilhar.setType("text/plain");
+                startActivity(Intent.createChooser(IntentCompartilhar, "Compartilhar"));
                 break;
             case R.id.id_ler:
                 String s =getTexto();

@@ -122,12 +122,11 @@ public class TelaImagem extends AppCompatActivity {
             case R.id.id_capturar:
                 if( s==null){
                     s= "Texto não capturado";
-                }else {
-                    Intent telaCam = new Intent(TelaImagem.this, telaCapturar.class);
-                    telaCam.putExtra("telaCapturar", s);
-                    startActivity(telaCam);
-                    break;
                 }
+                Intent telaCam = new Intent(TelaImagem.this, telaCapturar.class);
+                telaCam.putExtra("telaCapturar", s);
+                startActivity(telaCam);
+                break;
             case R.id.id_ler:
 
                 s =getTextoImagem();

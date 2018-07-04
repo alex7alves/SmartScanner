@@ -1,6 +1,8 @@
 package alex.alves.smartscanner;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -15,9 +17,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -42,6 +46,7 @@ public class TelaCamera extends AppCompatActivity {
     final int cameraPermission = 1001;
 
     Ler lerTexto;
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -84,6 +89,7 @@ public class TelaCamera extends AppCompatActivity {
 
         lerTexto = new Ler();
         lerTexto.initLerTexto(this);
+
     }
 
 
@@ -184,12 +190,11 @@ public class TelaCamera extends AppCompatActivity {
 
                 if( texto==null){
                     texto= "Texto não capturado";
-                }else {
-                    Intent telaCam = new Intent(TelaCamera.this, telaCapturar.class);
-                    telaCam.putExtra("telaCapturar", texto);
-                    startActivity(telaCam);
-                    break;
                 }
+                Intent telaCam = new Intent(TelaCamera.this, telaCapturar.class);
+                telaCam.putExtra("telaCapturar", texto);
+                startActivity(telaCam);
+                break;
             case R.id.id_ler:
 
 
