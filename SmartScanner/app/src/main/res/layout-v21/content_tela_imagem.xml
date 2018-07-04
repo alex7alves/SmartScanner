@@ -12,11 +12,11 @@
         android:id="@+id/imageView2"
         android:layout_width="371dp"
         android:layout_height="502dp"
-        android:layout_marginBottom="4dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginRight="4dp"
         android:background="#350a0a"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="?android:attr/colorButtonNormal" />
+
 </android.support.constraint.ConstraintLayout>

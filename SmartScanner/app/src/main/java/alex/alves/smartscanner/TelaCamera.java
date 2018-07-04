@@ -96,7 +96,7 @@ public class TelaCamera extends AppCompatActivity {
         } else {
             capturar = new CameraSource.Builder(getApplicationContext(), pegarTexto)
                     .setFacing(CameraSource.CAMERA_FACING_BACK)
-                    .setRequestedPreviewSize(1280, 1024)
+                    .setRequestedPreviewSize(1024, 768)
                     .setRequestedFps(1.0f)
                     .setAutoFocusEnabled(true)
                     .build();
