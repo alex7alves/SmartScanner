@@ -94,12 +94,8 @@ public class TelaCamera extends AppCompatActivity {
         if (!pegarTexto.isOperational()) {
             Toast.makeText(getApplicationContext(), " Texto não abriu", Toast.LENGTH_SHORT).show();
         } else {
-            capturar = new CameraSource.Builder(getApplicationContext(), pegarTexto)
-                    .setFacing(CameraSource.CAMERA_FACING_BACK)
-                    .setRequestedPreviewSize(1024, 768)
-                    .setRequestedFps(1.0f)
-                    .setAutoFocusEnabled(true)
-                    .build();
+
+            GerarCameraSoruce(pegarTexto,1024,768,1.0f,true);
 
             camera.getHolder().addCallback(new SurfaceHolder.Callback() {
                 @Override
@@ -122,9 +118,7 @@ public class TelaCamera extends AppCompatActivity {
                             public void receiveDetections(Detector.Detections<TextBlock> detections) {
                                 final SparseArray<TextBlock> palavras = detections.getDetectedItems();
                                 if(palavras.size() !=0){
-                                    //  texto.post(new Runnable() {
-                                    //   @Override
-                                    //    public void run() {
+
                                     StringBuilder s = new StringBuilder();
 
                                     for(int i=0;i<palavras.size();i++){
@@ -159,7 +153,15 @@ public class TelaCamera extends AppCompatActivity {
         }
     }
 
-
+    protected void GerarCameraSoruce(TextRecognizer pegarTexto, int altura,int largura,float frame,boolean foco)
+    {
+        capturar = new CameraSource.Builder(getApplicationContext(), pegarTexto)
+                .setFacing(CameraSource.CAMERA_FACING_BACK)
+                .setRequestedPreviewSize(altura,largura)
+                .setRequestedFps(frame)
+                .setAutoFocusEnabled(foco)
+                .build();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -179,7 +181,7 @@ public class TelaCamera extends AppCompatActivity {
 
         switch(item.getItemId()){
             case R.id.id_capturar:
-                //s= "Sem texto capturado";
+
                 if( texto==null){
                     texto= "Texto não capturado";
                 }else {
@@ -190,12 +192,9 @@ public class TelaCamera extends AppCompatActivity {
                 }
             case R.id.id_ler:
 
-                //lerTexto.speak(" VocÊ clicou no botão capturar ", TextToSpeech.QUEUE_ADD, null, "DEFAULT");
 
                 Toast.makeText(getBaseContext(),texto,Toast.LENGTH_LONG).show();
 
-                //lerTexto.speak(" VocÊ clicou no botão capturar ", TextToSpeech.QUEUE_ADD, null, "DEFAULT");
-               // lerTexto.speak(texto, TextToSpeech.QUEUE_ADD, null, "DEFAULT");
                 lerTexto.getLer(texto);
                 break;
         }
